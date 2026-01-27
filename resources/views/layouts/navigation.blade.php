@@ -1,0 +1,112 @@
+<nav x-data="{ open: false }" class="bg-black border-b border-white-800 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+
+            <!-- 左ブロック -->
+            <div class="flex items-center">
+                <div class="shrink-0 flex items-center">
+                    <a href="{{ route('dashboard') }}">
+                        <img src="{{ asset('assets/imgs/logo.png') }}" class="block h-10 w-auto" />
+                    </a>
+                </div>
+
+                @if (Auth::check())
+                    <div class="flex items-center ms-4 text-white text-sm sm:text-base">
+                        <img src="/assets/imgs/id.png" class="h-4 w-4 mr-2" />{{ Auth::user()->id }}
+                    </div>
+                    <div class="flex items-center ms-4 text-white text-sm sm:text-base">
+                        <img src="/assets/imgs/point.png" class="h-4 w-4 mr-2" />{{ Auth::user()->point }}
+                    </div>
+                @else
+                    <a href="{{ route('login') }}" class="px-4 py-2 flex items-center ms-10 text-white rounded hover:bg-blue-600 transition">
+                        LOGIN
+                    </a>
+                    
+                    
+                @endif
+            </div>
+
+            <!-- ハンバーガー -->
+            <div class="flex items-center">
+                <button @click="open = !open"
+                    class="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-white/20 transition">
+                    <svg class="h-8 w-8" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- オーバーレイ（nav高さの下から表示） -->
+    <div 
+        x-show="open" 
+        @click="open = false"
+        x-transition.opacity
+        class="fixed left-0 right-0 top-[64px] bottom-0 bg-black/50 z-40"
+        style="display:none">
+    </div>
+
+    <!-- 右側スライドインメニュー（nav高さの下から表示） -->
+    <div 
+        x-show="open"
+        x-transition:enter="transform transition ease-in-out duration-300"
+        x-transition:enter-start="translate-x-full"
+        x-transition:enter-end="translate-x-0"
+        x-transition:leave="transform transition ease-in-out duration-300"
+        x-transition:leave-start="translate-x-0"
+        x-transition:leave-end="translate-x-full"
+        class="fixed right-0 top-[64px] h-[calc(100vh-64px)] w-[40%] border-l border-white z-50 p-6 overflow-y-auto"
+        style="display:none; background-color: #e8be68">
+
+        <!-- 閉じるボタン -->
+        <button @click="open = false" class="absolute top-4 right-4 text-white">
+            <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <!-- メニュー -->
+        <div class="mt-10 space-y-4">
+            <x-responsive-nav-link :href="route('dashboard')">Dashboard</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('cast.list')">キャストリスト</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('cast.list')">ブログ</x-responsive-nav-link>
+
+            @if (Auth::check() && Auth::user()->is_cast)
+            <x-responsive-nav-link :href="route('blogs.create')" class="text-blue-500 font-bold">
+                ＋ ブログ投稿
+            </x-responsive-nav-link>
+            @endif
+
+            <x-responsive-nav-link :href="route('news.index')">ニュース</x-responsive-nav-link>
+
+            @if (Auth::check() && Auth::user()->is_cast)
+            <x-responsive-nav-link :href="route('news.create')" class="text-blue-500 font-bold">
+                ＋ ニュース投稿
+            </x-responsive-nav-link>
+            @endif
+
+            <x-responsive-nav-link :href="route('system_prices.index')">システム料金</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('recruit.index')">リクルート</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('shops.index')">紹介店舗</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('mypage')">マイページ</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('game.box.result')">当選番号</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('profile.edit')">プロファイル編集</x-responsive-nav-link>
+
+            @if (Auth::check())
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <x-responsive-nav-link :href="route('logout')"
+                    onclick="event.preventDefault(); this.closest('form').submit();">
+                    {{ __('Log Out') }}
+                </x-responsive-nav-link>
+            </form>
+            @endif
+        </div>
+
+    </div>
+
+</nav>

@@ -1,0 +1,33 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2>リクルート（求人情報）</h2>
+    </x-slot>
+    <div class="max-w-2xl mx-auto mt-8 bg-white rounded-lg shadow p-6">
+        <h3 class="font-bold text-xl mb-4">募集要項</h3>
+        <table class="w-full border mb-6">
+            <thead>
+                <tr class="bg-gray-100 text-left">
+                    <th class="p-2">職種</th>
+                    <th class="p-2">雇用形態</th>
+                    <th class="p-2">内容</th>
+                    <th class="p-2">時間</th>
+                    <th class="p-2">給与</th>
+                    <th class="p-2">待遇</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($recruits as $item)
+                <tr>
+                    <td class="p-2">{{ $item->category }}</td>
+                    <td class="p-2">{{ $item->job_type }}</td>
+                    <td class="p-2">{{ $item->content }}</td>
+                    <td class="p-2">{{ $item->time }}</td>
+                    <td class="p-2">{{ $item->salary }}</td>
+                    <td class="p-2">{{ $item->benefit }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <div class="text-sm text-gray-600">ご応募・お問い合わせはフォームまたはお電話でどうぞ。</div>
+    </div>
+</x-app-layout>

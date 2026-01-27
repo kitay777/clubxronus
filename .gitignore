@@ -1,0 +1,9 @@
+storage
+tests
+
+.DS_Store
+.editorconfig
+.env
+.env.example
+composer.lock
+docker-compose.yml
