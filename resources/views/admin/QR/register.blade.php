@@ -8,7 +8,7 @@
 
     <div class="bg-white p-6 rounded shadow w-fit">
         <div class="mb-4 text-center">
-            {!! qrcode::size(240)->generate($url) !!}
+            {!! QrCode::size(240)->generate($url) !!}
         </div>
 
         <div class="text-center">
