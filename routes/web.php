@@ -36,6 +36,12 @@ use App\Http\Controllers\Admin\AdminBoxGameController;
 use App\Http\Controllers\Admin\AdminBoxGameResultController;
 use App\Http\Controllers\AdminUserKarteController;
 use App\Http\Controllers\AdminUserVisitController;
+use App\Http\Controllers\Admin\QrController;
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/qr/register', [QrController::class, 'register'])
+        ->name('admin.qr.register');
+});
 
 Route::middleware(['auth', 'admin'])
     ->prefix('admin/users/{user}')

@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'tel',  // 電話番号
         'password',
         'point',  // ポイント
         'profile_photo_path',  // プロフィール写真
