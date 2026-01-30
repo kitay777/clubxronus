@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserVisit;
+use App\Services\PointGrantService; // ★ import だけ
+use Illuminate\Support\Facades\DB;
+
+
 
 class AdminUserVisitController extends Controller
 {
@@ -24,29 +28,52 @@ class AdminUserVisitController extends Controller
     /**
      * 来店履歴追加
      */
-    public function store(Request $request, User $user)
-    {
-        $request->validate([
-            'visit_date' => 'required|date',
-            'amount'     => 'nullable|integer|min:0',
-            'cast_name'  => 'nullable|string|max:255',
-            'time_slot'  => 'nullable|string|max:255',
-            'memo'       => 'nullable|string',
-        ]);
 
-        UserVisit::create([
-            'user_id'    => $user->id,
-            'visit_date' => $request->visit_date,
-            'amount'     => $request->amount,
-            'cast_name'  => $request->cast_name,
-            'time_slot'  => $request->time_slot,
-            'memo'       => $request->memo,
-        ]);
+public function store(Request $request, User $user)
+{
+    $request->validate([
+        'visit_date' => 'required|date',
+        'amount'     => 'nullable|integer|min:0',
+        'cast_name'  => 'nullable|string|max:255',
+        'time_slot'  => 'nullable|string|max:255',
+        'memo'       => 'nullable|string',
+    ]);
 
-        return redirect()
-            ->route('admin.users.visits.index', $user)
-            ->with('success', '来店履歴を追加しました');
+    // ① 先にポイント計算（まだDBは触らない）
+    $grantedPoint = 0;
+
+    if ($request->amount) {
+        $grantedPoint = PointGrantService::calculateForPurchase(
+            (int) $request->amount
+        );
     }
+
+    // ② 来店履歴保存（point も一緒に）
+    $visit = UserVisit::create([
+        'user_id'    => $user->id,
+        'visit_date' => $request->visit_date,
+        'amount'     => $request->amount,
+        'point'      => $grantedPoint, // ★ここで使う
+        'cast_name'  => $request->cast_name,
+        'time_slot'  => $request->time_slot,
+        'memo'       => $request->memo,
+    ]);
+
+    // ③ ポイント実付与（users + point_histories）
+    if ($grantedPoint > 0) {
+        PointGrantService::grantCalculatedPoint(
+            $user,
+            $grantedPoint,
+            "売上ポイント付与（来店ID:{$visit->id}）"
+        );
+    }
+
+    return redirect()
+        ->route('admin.users.visits.index', $user)
+        ->with('success', "来店履歴を追加しました（{$grantedPoint}pt 付与）");
+}
+
+
 
     /**
      * 来店履歴削除

@@ -63,7 +63,7 @@
                       rows="3"></textarea>
         </div>
 
-        <button class="mt-4 px-6 py-2 bg-gray-700 text-white rounded">
+        <button class="mt-4 px-6 py-2 bg-black text-white rounded">
             追加
         </button>
     </form>
@@ -81,12 +81,18 @@
 @if($visits->count())
     @foreach($visits as $v)
         <div class="mb-3 p-4 border rounded bg-white">
-            <div class="font-semibold">
-                {{ $v->visit_date }}
-                @if($v->amount)
-                    / ¥{{ number_format($v->amount) }}
-                @endif
-            </div>
+<div class="font-semibold">
+    {{ $v->visit_date }}
+    @if($v->amount)
+        / ¥{{ number_format($v->amount) }}
+    @endif
+
+    @if($v->point)
+        <span class="ml-2 text-sm text-green-700">
+            +{{ $v->point }}pt
+        </span>
+    @endif
+</div>
 
             <div class="text-sm text-gray-700">
                 指名：{{ $v->cast_name ?? '—' }}
