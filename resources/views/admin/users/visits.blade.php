@@ -68,7 +68,12 @@
             {{ session('success') }}
         </div>
     @endif
-
+    <div class="mb-4 p-4 rounded bg-slate-100">
+        <span class="text-gray-600">現在の保有ポイント：</span>
+        <span class="ml-2 text-2xl font-bold text-emerald-700">
+            {{ number_format($user->point) }} pt
+        </span>
+    </div>
     @if ($visits->count())
         @foreach ($visits as $v)
             <div class="mb-3 p-4 border rounded bg-white">
