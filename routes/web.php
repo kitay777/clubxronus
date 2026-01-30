@@ -37,6 +37,44 @@ use App\Http\Controllers\Admin\AdminBoxGameResultController;
 use App\Http\Controllers\AdminUserKarteController;
 use App\Http\Controllers\AdminUserVisitController;
 use App\Http\Controllers\Admin\QrController;
+// routes/admin.php（または web.php の admin group）
+
+use App\Http\Controllers\Admin\PointBaseSettingController;
+use App\Http\Controllers\Admin\PointEventController;
+
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->group(function () {
+
+        // 通常ポイント設定（1件）
+        Route::get('/points/base', [PointBaseSettingController::class, 'edit'])
+            ->name('admin.points.base.edit');
+        Route::put('/points/base', [PointBaseSettingController::class, 'update'])
+            ->name('admin.points.base.update');
+
+        // イベントポイント
+
+        Route::get('/points/events', [PointEventController::class, 'index'])
+            ->name('admin.points.events.index');
+
+        Route::get('/points/events/create', [PointEventController::class, 'create'])
+            ->name('admin.points.events.create');
+
+        Route::post('/points/events', [PointEventController::class, 'store'])
+            ->name('admin.points.events.store');
+
+        // ★ これが無いと編集できない
+        Route::get('/points/events/{event}/edit', [PointEventController::class, 'edit'])
+            ->name('admin.points.events.edit');
+
+        Route::put('/points/events/{event}', [PointEventController::class, 'update'])
+            ->name('admin.points.events.update');
+
+        // （任意）
+        Route::patch('/points/events/{event}/toggle', [PointEventController::class, 'toggle'])
+            ->name('admin.points.events.toggle');
+    });
+
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/qr/register', [QrController::class, 'register'])

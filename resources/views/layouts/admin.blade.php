@@ -113,9 +113,17 @@
                         : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
                     ポイント履歴
                 </a>
+                <a href="{{ route('admin.points.base.edit') }}"
+                    class="block px-4 py-2 rounded {{ request()->routeIs('admin.points.base.*') ? 'bg-gray-800 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+
+                通常ポイント設定</a>
+                <a href="{{ route('admin.points.events.index') }}" 
+                    class="block px-4 py-2 rounded {{ request()->routeIs('admin.points.events.*') ? 'bg-gray-800 text-white' : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                    イベントポイント設定</a>
             </nav>
         </aside>
 
+        
 
         {{-- ✅ メインコンテンツ --}}
         <main class="flex-1 p-6 bg-gray-100 overflow-y-auto">
