@@ -18,9 +18,10 @@ class AdminUserVisitController extends Controller
      */
     public function index(User $user)
     {
-        $visits = UserVisit::where('user_id', $user->id)
-            ->orderByDesc('visit_date')
-            ->get();
+$visits = UserVisit::where('user_id', $user->id)
+    ->orderByDesc('visit_date')
+    ->orderByDesc('id')   // 同日が複数ある場合の保険
+    ->get();
 
         return view('admin.users.visits', compact('user', 'visits'));
     }
