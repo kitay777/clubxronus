@@ -10,6 +10,7 @@ class UserVisit extends Model
         'user_id',      // ← ★これを必ず追加
         'visit_date',
         'amount',
+        'point',
         'cast_name',
         'time_slot',
         'memo',
