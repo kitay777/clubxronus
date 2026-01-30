@@ -23,7 +23,11 @@ class PointHistoryController extends Controller
         }
 
         // ページネーションで表示
-        $pointHistories = $query->with('user')->paginate(10);
+        $pointHistories = $query
+            ->with('user')
+            ->orderByDesc('created_at') // ★追加
+            ->paginate(50);
+;
 
         return view('admin.point_histories.index', compact('pointHistories'));
     }

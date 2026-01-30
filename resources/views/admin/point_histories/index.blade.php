@@ -22,6 +22,7 @@
                 <th class="py-2 px-4 text-left">ユーザー名</th>
                 <th class="py-2 px-4 text-left">ポイント変更</th>
                 <th class="py-2 px-4 text-left">変更日時</th>
+                <th class="py-2 px-4 text-left">理由</th>
                 <th class="py-2 px-4 text-left">アクション</th>
             </tr>
         </thead>
@@ -31,6 +32,13 @@
                     <td class="py-2 px-4">{{ $pointHistory->user->name }}</td>
                     <td class="py-2 px-4">{{ $pointHistory->change }}</td>
                     <td class="py-2 px-4">{{ $pointHistory->created_at->format('Y-m-d H:i') }}</td>
+                    <td class="py-2 px-4">{{ $pointHistory->reason }}
+                    @if(Str::contains($pointHistory->reason, '来店ID'))
+                        <a href="{{ route('admin.users.visits.index', $pointHistory->user_id) }}">
+                            来店履歴
+                        </a>
+                    @endif
+                    
                     <td class="py-2 px-4">
                         <form action="{{ route('admin.point_histories.destroy', $pointHistory->id) }}" method="POST" class="inline">
                             @csrf
@@ -40,6 +48,9 @@
                     </td>
                 </tr>
             @endforeach
+            <div class="mt-6">
+                {{ $pointHistories->links() }}
+            </div>
         </tbody>
     </table>
 
