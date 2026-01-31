@@ -45,6 +45,9 @@ use App\Http\Controllers\Auth\LineAuthController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 use App\Http\Controllers\Admin\AdminUserMessageController;
+use App\Http\Controllers\LineWebhookController;
+
+Route::post('/line/webhook', [LineWebhookController::class, 'handle']);
 
 Route::middleware(['auth', 'admin'])
     ->prefix('admin/users/{user}')
