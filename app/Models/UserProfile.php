@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserProfile extends Model
 {
     use HasFactory;
-        protected $fillable = [
+    protected $fillable = [
         'user_id',     // ← ★これを追加
         'nickname',
         'age',
@@ -19,4 +19,8 @@ class UserProfile extends Model
         'features',
         'memo',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

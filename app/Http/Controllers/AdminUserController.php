@@ -12,14 +12,49 @@ use Illuminate\Support\Facades\DB;
 
 class AdminUserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // ユーザー一覧を取得
-        $users = User::all();
+        $query = User::query()
+            ->with(['profile', 'visits']);
 
-        // ビューに渡す
+        // 名前（部分一致）
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        // 年齢
+        if ($request->filled('age')) {
+            $query->whereHas('profile', function ($q) use ($request) {
+                $q->where('age', $request->age);
+            });
+        }
+
+        // 住まい
+        if ($request->filled('residence')) {
+            $query->whereHas('profile', function ($q) use ($request) {
+                $q->where('residence', 'like', '%' . $request->residence . '%');
+            });
+        }
+
+        // 来店日
+        if ($request->filled('visit_date')) {
+            $query->whereHas('visits', function ($q) use ($request) {
+                $q->whereDate('visit_date', $request->visit_date);
+            });
+        }
+
+        // 指名
+        if ($request->filled('cast_name')) {
+            $query->whereHas('visits', function ($q) use ($request) {
+                $q->where('cast_name', 'like', '%' . $request->cast_name . '%');
+            });
+        }
+
+        $users = $query->orderByDesc('id')->paginate(20);
+
         return view('admin.users.index', compact('users'));
     }
+
 
     // ユーザー編集画面
     public function edit(User $user)

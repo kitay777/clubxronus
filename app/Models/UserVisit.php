@@ -15,4 +15,8 @@ class UserVisit extends Model
         'time_slot',
         'memo',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
