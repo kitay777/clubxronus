@@ -12,6 +12,14 @@
             class="inline-flex items-center px-4 py-2 bg-black text-white rounded hover:bg-gray-800">
             来店履歴
         </a>
+        
+        @if ($user->line_user_id)
+            <a href="{{ route('admin.users.message.create', $user) }}"
+            class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                LINEメッセージ送信
+            </a>
+        @endif
+
     </div>
     <form action="{{ route('admin.users.update', $user->id) }}" method="POST" enctype="multipart/form-data">
         @csrf

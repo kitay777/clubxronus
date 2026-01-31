@@ -44,6 +44,18 @@ use App\Http\Controllers\Admin\PointEventController;
 use App\Http\Controllers\Auth\LineAuthController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
+use App\Http\Controllers\Admin\AdminUserMessageController;
+
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin/users/{user}')
+    ->group(function () {
+        Route::get('/message', [AdminUserMessageController::class, 'create'])
+            ->name('admin.users.message.create');
+
+        Route::post('/message', [AdminUserMessageController::class, 'send'])
+            ->name('admin.users.message.send');
+    });
+
 Route::middleware('guest')->prefix('admin')->group(function () {
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])
         ->name('admin.login');
