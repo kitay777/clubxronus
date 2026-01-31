@@ -41,6 +41,25 @@ use App\Http\Controllers\Admin\QrController;
 
 use App\Http\Controllers\Admin\PointBaseSettingController;
 use App\Http\Controllers\Admin\PointEventController;
+use App\Http\Controllers\Auth\LineAuthController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+
+Route::middleware('guest')->prefix('admin')->group(function () {
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+        ->name('admin.login');
+
+    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+});
+
+Route::get('/login', fn () => redirect()->route('auth.line.redirect'));
+Route::get('/register', fn () => redirect()->route('auth.line.redirect'));
+
+Route::get('/auth/line/redirect', [LineAuthController::class, 'redirect'])
+    ->name('auth.line.redirect');
+
+Route::get('/auth/line/callback', [LineAuthController::class, 'callback'])
+    ->name('auth.line.callback');
+
 
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')

@@ -18,9 +18,10 @@
                         <img src="/assets/imgs/point.png" class="h-4 w-4 mr-2" />{{ Auth::user()->point }}
                     </div>
                 @else
-                    <a href="{{ route('login') }}" class="px-4 py-2 flex items-center ms-10 text-white rounded hover:bg-blue-600 transition">
-                        LOGIN
-                    </a>
+    <a href="{{ route('auth.line.redirect') }}"
+       class="px-4 py-2 flex items-center ms-10 text-white rounded hover:bg-blue-600 transition">
+        LINE LOGIN
+    </a>
                     
                     
                 @endif

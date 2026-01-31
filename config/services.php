@@ -30,5 +30,13 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'line_login' => [
+        'client_id' => env('LINE_LOGIN_CLIENT_ID'),
+        'client_secret' => env('LINE_LOGIN_CLIENT_SECRET'),
+    ],
+    'line' => [
+        'channel_access_token' => env('LINE_CHANNEL_ACCESS_TOKEN'),
+    ],
+
 
 ];

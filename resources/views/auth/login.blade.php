@@ -11,7 +11,8 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('admin.login') }}">
+
         @csrf
 
         <!-- ID -->
@@ -57,24 +58,23 @@
         </div>
 
 
-        <!-- or -->
+        <!-- 
         <div class="flex items-center mt-10 mb-6">
             <div class="flex-1 border-t border-gray-600"></div>
             <span class="mx-4 text-gray-400">または</span>
             <div class="flex-1 border-t border-gray-600"></div>
         </div>
-
-
-        <!-- Registration -->
+ 
+        
         <div class="text-center">
-            <a href="{{ route('register') }}"
+            <a href=""
                class="inline-block px-10 py-3 text-lg font-bold text-white 
                       bg-black border border-yellow-500 rounded
                       hover:bg-yellow-500 hover:text-black transition">
                 新規登録
             </a>
         </div>
-
+        -->
     </form>
 
 </div>
