@@ -61,6 +61,13 @@
                     <td class="border px-2 py-1">
                         {{ optional($user->visits->first())->visit_date ?? '—' }}
                     </td>
+                    <td>
+                        @if ($user->is_line_friend)
+                            <span class="text-green-600 font-bold">送信OK</span>
+                        @else
+                            <span class="text-red-500">未友だち</span>
+                        @endif
+                    </td>
                     <td class="border px-2 py-1">
                         <a href="{{ route('admin.users.edit', $user) }}" class="text-blue-600">編集</a>
                     </td>

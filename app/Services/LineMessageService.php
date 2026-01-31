@@ -8,8 +8,10 @@ class LineMessageService
 {
     public static function push(string $lineUserId, string $message): void
     {
-        if (!$lineUserId) {
-            return; // LINE未連携
+        $user = \App\Models\User::where('line_user_id', $lineUserId)->first();
+
+        if (!$user || !$user->is_line_friend) {
+            return; // 送信不可
         }
 
         Http::withOptions([
@@ -19,10 +21,7 @@ class LineMessageService
             ->post('https://api.line.me/v2/bot/message/push', [
                 'to' => $lineUserId,
                 'messages' => [
-                    [
-                        'type' => 'text',
-                        'text' => $message,
-                    ]
+                    ['type' => 'text', 'text' => $message],
                 ],
             ]);
     }

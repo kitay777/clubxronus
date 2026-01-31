@@ -98,6 +98,25 @@
             <x-responsive-nav-link :href="route('profile.edit')">プロファイル編集</x-responsive-nav-link>
 
             @if (Auth::check())
+            @if (!Auth::user()->is_line_friend)
+                @if (Auth::check() && !Auth::user()->is_line_friend)
+                    <div class="mt-4 p-4 border rounded bg-yellow-100 text-black">
+                        <p class="font-bold">お知らせを受け取るには</p>
+                        <p class="mt-2">
+                            公式LINEを友だち追加してください。
+                        </p>
+                        <a href="https://line.me/R/ti/p/@758nctis"
+                        target="_blank"
+                        rel="noopener"
+                        class="inline-block mt-3 px-4 py-2 bg-green-600 text-white rounded">
+                            LINE友だち追加
+                        </a>
+                    </div>
+                @endif
+
+            @endif
+            
+
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <x-responsive-nav-link :href="route('logout')"
