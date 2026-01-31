@@ -17,15 +17,20 @@ class AdminUserController extends Controller
         $query = User::query()
             ->with(['profile', 'visits']);
 
-        // 名前（部分一致）
+        // 名前
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
         }
 
-        // 年齢
-        if ($request->filled('age')) {
+        // 年齢 範囲
+        if ($request->filled('age_from') || $request->filled('age_to')) {
             $query->whereHas('profile', function ($q) use ($request) {
-                $q->where('age', $request->age);
+                if ($request->filled('age_from')) {
+                    $q->where('age', '>=', $request->age_from);
+                }
+                if ($request->filled('age_to')) {
+                    $q->where('age', '<=', $request->age_to);
+                }
             });
         }
 
@@ -36,10 +41,15 @@ class AdminUserController extends Controller
             });
         }
 
-        // 来店日
-        if ($request->filled('visit_date')) {
+        // 来店日 範囲
+        if ($request->filled('visit_from') || $request->filled('visit_to')) {
             $query->whereHas('visits', function ($q) use ($request) {
-                $q->whereDate('visit_date', $request->visit_date);
+                if ($request->filled('visit_from')) {
+                    $q->whereDate('visit_date', '>=', $request->visit_from);
+                }
+                if ($request->filled('visit_to')) {
+                    $q->whereDate('visit_date', '<=', $request->visit_to);
+                }
             });
         }
 
@@ -54,6 +64,7 @@ class AdminUserController extends Controller
 
         return view('admin.users.index', compact('users'));
     }
+
 
 
     // ユーザー編集画面

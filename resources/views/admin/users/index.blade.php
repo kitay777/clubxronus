@@ -5,15 +5,30 @@
 
     <form method="GET" class="mb-6 p-4 border rounded bg-gray-50">
         <div class="grid grid-cols-3 gap-4">
+
+            {{-- 名前 --}}
             <input type="text" name="name" value="{{ request('name') }}" placeholder="名前" class="border p-2 rounded">
 
-            <input type="number" name="age" value="{{ request('age') }}" placeholder="年齢" class="border p-2 rounded">
+            {{-- 年齢（範囲） --}}
+            <div class="flex gap-2">
+                <input type="number" name="age_from" value="{{ request('age_from') }}" placeholder="年齢 From"
+                    class="border p-2 rounded w-1/2">
+                <input type="number" name="age_to" value="{{ request('age_to') }}" placeholder="年齢 To"
+                    class="border p-2 rounded w-1/2">
+            </div>
 
+            {{-- 住まい --}}
             <input type="text" name="residence" value="{{ request('residence') }}" placeholder="住まい"
                 class="border p-2 rounded">
 
-            <input type="date" name="visit_date" value="{{ request('visit_date') }}" class="border p-2 rounded">
+            {{-- 来店日（範囲） --}}
+            <div class="flex gap-2">
+                <input type="date" name="visit_from" value="{{ request('visit_from') }}"
+                    class="border p-2 rounded w-1/2">
+                <input type="date" name="visit_to" value="{{ request('visit_to') }}" class="border p-2 rounded w-1/2">
+            </div>
 
+            {{-- 指名 --}}
             <input type="text" name="cast_name" value="{{ request('cast_name') }}" placeholder="指名"
                 class="border p-2 rounded">
         </div>
@@ -23,6 +38,7 @@
             <a href="{{ route('admin.users.index') }}" class="ml-3 text-sm text-gray-600">リセット</a>
         </div>
     </form>
+
 
     <table class="min-w-full table-auto border-collapse">
         <thead>
