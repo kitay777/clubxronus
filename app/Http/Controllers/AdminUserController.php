@@ -12,6 +12,19 @@ use Illuminate\Support\Facades\DB;
 
 class AdminUserController extends Controller
 {
+    public function toggleApproval(User $user)
+    {
+        // 自分自身を操作させないなどの制御（任意）
+        if ($user->id === auth()->id()) {
+            return back();
+        }
+
+        $user->update([
+            'is_approved' => ! $user->is_approved,
+        ]);
+
+        return back();
+    }
     public function index(Request $request)
     {
         $query = User::query()

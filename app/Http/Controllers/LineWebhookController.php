@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class LineWebhookController extends Controller
 {
@@ -38,5 +39,29 @@ class LineWebhookController extends Controller
         }
 
         return response()->json(['status' => 'ok']);
+    }
+
+
+    public function checkLineFriend(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = $request->user();
+
+        if (!$user || !$user->line_user_id) {
+            return response()->json([
+                'is_line_friend' => false,
+            ]);
+        }
+
+        $response = Http::withToken(config('services.line.channel_access_token'))
+            ->get("https://api.line.me/v2/bot/profile/{$user->line_user_id}");
+
+        if ($response->successful()) {
+            $user->update(['is_line_friend' => true]);
+        }
+
+        return response()->json([
+            'is_line_friend' => $user->fresh()->is_line_friend,
+        ]);
     }
 }

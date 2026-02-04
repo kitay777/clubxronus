@@ -45,10 +45,12 @@
             <tr>
                 <th class="border px-2 py-1">ID</th>
                 <th class="border px-2 py-1">名前</th>
+                <th class="border px-2 py-1">氏名</th>
                 <th class="border px-2 py-1">年齢</th>
                 <th class="border px-2 py-1">住まい</th>
                 <th class="border px-2 py-1">最終来店日</th>
                 <th class="border px-2 py-1">操作</th>
+                <th class="border px-2 py-1">承認状態</th>
             </tr>
         </thead>
         <tbody>
@@ -56,6 +58,7 @@
                 <tr>
                     <td class="border px-2 py-1">{{ $user->id }}</td>
                     <td class="border px-2 py-1">{{ $user->name }}</td>
+                    <td class="border px-2 py-1">{{ $user->shimei }}</td>
                     <td class="border px-2 py-1">{{ $user->profile->age ?? '—' }}</td>
                     <td class="border px-2 py-1">{{ $user->profile->residence ?? '—' }}</td>
                     <td class="border px-2 py-1">
@@ -68,6 +71,24 @@
                             <span class="text-red-500">未友だち</span>
                         @endif
                     </td>
+                    <td class="border px-2 py-1 text-center">
+                        <form method="POST" action="{{ route('admin.users.toggleApproval', $user) }}"
+                            onsubmit="return confirm('承認状態を切り替えますか？')">
+                            @csrf
+                            @method('PATCH')
+
+                            @if ($user->is_approved)
+                                <button class="px-3 py-1 rounded bg-green-600 text-white text-sm font-bold">
+                                    承認済
+                                </button>
+                            @else
+                                <button class="px-3 py-1 rounded bg-red-500 text-white text-sm font-bold">
+                                    未承認
+                                </button>
+                            @endif
+                        </form>
+                    </td>
+
                     <td class="border px-2 py-1">
                         <a href="{{ route('admin.users.edit', $user) }}" class="text-blue-600">編集</a>
                     </td>

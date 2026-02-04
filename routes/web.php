@@ -47,7 +47,29 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\AdminUserMessageController;
 use App\Http\Controllers\LineWebhookController;
 
+use App\Http\Controllers\ProfileInitialController;
+
+
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::patch('/users/{user}/toggle-approval', [
+        \App\Http\Controllers\Admin\UserController::class,
+        'toggleApproval'
+    ])->name('users.toggleApproval');
+});
+
+Route::middleware('auth')->post(
+    '/profile/initial',
+    [ProfileInitialController::class, 'store']
+)->name('profile.initial.store');
+
+
 Route::post('/line/webhook', [LineWebhookController::class, 'handle']);
+
+// LINE友だち再確認（ログインユーザー用）
+Route::post('/line/check-friend', [LineWebhookController::class, 'checkLineFriend'])
+    ->middleware('auth');
+
 
 Route::middleware(['auth', 'admin'])
     ->prefix('admin/users/{user}')

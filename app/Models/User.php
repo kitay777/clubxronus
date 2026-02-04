@@ -19,7 +19,9 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'shimei',  // 氏名  ★ 追加
         'email',
+        'is_approved',  // 承認済みかどうか  ★ 追加
         'tel',  // 電話番号
         'password',
         'point',  // ポイント
