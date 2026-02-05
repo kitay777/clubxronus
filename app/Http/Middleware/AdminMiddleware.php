@@ -12,7 +12,7 @@ use App\Models\User;
 
 class AdminMiddleware
 {
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
         if (auth()->check() && auth()->user()->is_admin) {
             return $next($request);

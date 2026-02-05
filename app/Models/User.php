@@ -22,6 +22,8 @@ class User extends Authenticatable
         'shimei',  // 氏名  ★ 追加
         'email',
         'is_approved',  // 承認済みかどうか  ★ 追加
+        'line_user_id',  // LINEユーザーID  ★ 追加
+        'is_line_friend',  // LINE友だちかどうか  ★ 追加
         'tel',  // 電話番号
         'password',
         'point',  // ポイント

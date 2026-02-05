@@ -58,6 +58,9 @@ class LineWebhookController extends Controller
 
         if ($response->successful()) {
             $user->update(['is_line_friend' => true]);
+        } else {
+            // 404 / 401 / 403 など
+            $user->update(['is_line_friend' => false]);
         }
 
         return response()->json([

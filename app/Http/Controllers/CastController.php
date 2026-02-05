@@ -11,30 +11,42 @@ use App\Models\ShopInfo; // ShopInfoモデルをインポート
 use App\Models\TopImage; // TopImageモデルをインポート
 use App\Models\Ticker; // Tickerモデルをインポート
 use App\Models\News; // Newsモデルをインポート
+use App\Services\LineFriendService; // LineFriendServiceをインポート
 
 class CastController extends Controller
 {
     //
-    public function dashboard()
+
+    public function dashboard(LineFriendService $lineFriend)
     {
         $user = Auth::user();
+
+        if ($user && $user->line_user_id) {
+            // 🔴 毎回 LINE に事実確認
+            $isFriend = $lineFriend->isFriend($user);
+
+            // キャッシュとしてDB更新（任意だがおすすめ）
+            $user->update([
+                'is_line_friend' => $isFriend,
+            ]);
+        }
         $casts = \App\Models\Cast::orderBy('id')->get();
         $shopInfo = ShopInfo::first(); // 最初のレコードを取得（1つだけの場合）
         $topImages = TopImage::orderBy('order')->get();
         $tickers = Ticker::where('is_active', true)->orderBy('order')->pluck('text');
-            $latestNews = News::where('is_active', true)
-                ->orderByDesc('published_at')
-                ->take(5)
-                ->get();
+        $latestNews = News::where('is_active', true)
+            ->orderByDesc('published_at')
+            ->take(5)
+            ->get();
         $latestBlogs = \App\Models\Blog::orderByDesc('published_at')->take(6)->get();
 
-        return view('casts.dashboard', compact('casts','user','shopInfo', 'topImages', 'tickers', 'latestNews', 'latestBlogs'));
+        return view('casts.dashboard', compact('casts', 'user', 'shopInfo', 'topImages', 'tickers', 'latestNews', 'latestBlogs'));
     }
     public function list()
     {
         $user = Auth::user();
         $casts = \App\Models\Cast::orderBy('id')->get();
-        return view('casts.list', compact('casts','user'));
+        return view('casts.list', compact('casts', 'user'));
     }
 
     // 一覧表示
@@ -47,18 +59,17 @@ class CastController extends Controller
     // 詳細表示
     public function show(Cast $cast)
     {
-    $blogs = $cast->blogs()->orderByDesc('published_at')->paginate(5);
+        $blogs = $cast->blogs()->orderByDesc('published_at')->paginate(5);
 
-    // ニュース一覧（そのキャスト専用＋全体向け）
-    $news = \App\Models\News::where(function ($q) use ($cast) {
-        $q->where('is_all', true)
-          ->orWhere('cast_id', $cast->id);
-    })->orderByDesc('published_at')->paginate(5);
+        // ニュース一覧（そのキャスト専用＋全体向け）
+        $news = \App\Models\News::where(function ($q) use ($cast) {
+            $q->where('is_all', true)
+                ->orWhere('cast_id', $cast->id);
+        })->orderByDesc('published_at')->paginate(5);
 
-    return view('casts.show', compact('cast', 'blogs', 'news'));
-
+        return view('casts.show', compact('cast', 'blogs', 'news'));
     }
-    
+
 
     // 作成フォーム
     public function create()
@@ -157,9 +168,8 @@ class CastController extends Controller
             $cast->image_path = $request->file('image_path')->store('cast_images', 'public');
         }
         $cast->user_id = $user->id;
-        
+
         $cast->update();
         return redirect()->route('casts.edit.mine')->with('success', 'プロフィールを更新しました');
     }
 }
-
