@@ -24,7 +24,7 @@ class ProfileInitialController extends Controller
 
         $user->update([
             'shimei' => $request->shimei,
-            'is_approved' => false,
+            'is_approved' => true,
         ]);
 
         $user->profile()->updateOrCreate(

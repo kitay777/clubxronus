@@ -53,7 +53,7 @@ use App\Http\Controllers\ProfileInitialController;
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::patch('/users/{user}/toggle-approval', [
-        \App\Http\Controllers\Admin\UserController::class,
+        AdminUserController::class,
         'toggleApproval'
     ])->name('users.toggleApproval');
 });

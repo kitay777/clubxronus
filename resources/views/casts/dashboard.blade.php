@@ -9,7 +9,7 @@
             初回プロフィール登録（必須）
         </h2>
         <p class="text-sm text-gray-600 mb-4">
-            入力後、管理者の承認をお待ちください。
+            利用するためには、名前・年齢の入力は必須です。その他の情報は任意ですが、できるだけご入力ください。
         </p>
 
         <form method="POST" action="{{ route('profile.initial.store') }}" class="space-y-3">
@@ -64,11 +64,11 @@
 >
     <div class="bg-white w-full max-w-md rounded-lg p-6 text-center shadow-xl">
         <h2 class="text-xl font-bold text-red-600 mb-3">
-            管理者の承認待ちです
+            現在利用を停止しています。
         </h2>
 
         <p class="text-gray-700 mb-4">
-            入力内容を確認後、管理者が承認します。
+            現在利用を停止しています。
         </p>
 
         <form method="POST" action="{{ route('logout') }}">
