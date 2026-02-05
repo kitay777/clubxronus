@@ -31,7 +31,26 @@ class LineFriendService
         return $response->successful();
     }
 
+    public function check(User $user): string
+    {
+        if (!$user->line_user_id) {
+            return 'no_line';
+        }
 
+        $res = Http::withOptions([
+            'verify' => false,
+        ])->withToken(
+            config('services.line.channel_access_token')
+        )->get("https://api.line.me/v2/bot/profile/{$user->line_user_id}");
+
+        if ($res->successful()) {
+            return 'friend';
+        } else {
+            return 'blocked';
+        }
+
+        return 'error';
+    }
 
     public function sync(User $user): void
     {

@@ -1,84 +1,52 @@
 @if (Auth::check() && Auth::user()->shimei === null)
-<div
-    x-show="showProfileModal"
-    x-transition.opacity
-    class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70"
->
-    <div class="bg-white w-full max-w-lg rounded-lg p-6 shadow-xl text-black mx-4">
-        <h2 class="text-xl font-bold text-red-600 mb-1">
-            初回プロフィール登録（必須）
-        </h2>
-        <p class="text-sm text-gray-600 mb-4">
-            利用するためには、名前・年齢の入力は必須です。その他の情報は任意ですが、できるだけご入力ください。
-        </p>
+    <div x-show="showProfileModal" x-transition.opacity
+        class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70">
+        <div class="bg-white w-full max-w-lg rounded-lg p-6 shadow-xl text-black mx-4">
+            <h2 class="text-xl font-bold text-red-600 mb-1">
+                初回プロフィール登録（必須）
+            </h2>
+            <p class="text-sm text-gray-600 mb-4">
+                利用するためには、名前・年齢の入力は必須です。その他の情報は任意ですが、できるだけご入力ください。
+            </p>
 
-        <form method="POST" action="{{ route('profile.initial.store') }}" class="space-y-3">
-            @csrf
+            <form method="POST" action="{{ route('profile.initial.store') }}" class="space-y-3">
+                @csrf
 
-            <input
-                name="shimei"
-                required
-                class="w-full border rounded p-2"
-                placeholder="名前 or ニックネーム"
-            >
+                <input name="shimei" required class="w-full border rounded p-2" placeholder="名前 or ニックネーム">
 
-            <input
-                name="age"
-                type="number"
-                required
-                class="w-full border rounded p-2"
-                placeholder="年齢"
-            >
+                <input name="age" type="number" required class="w-full border rounded p-2" placeholder="年齢">
 
-            <input
-                name="blood_type"
-                class="w-full border rounded p-2"
-                placeholder="血液型（任意）"
-            >
+                <input name="blood_type" class="w-full border rounded p-2" placeholder="血液型（任意）">
 
-            <input
-                name="residence"
-                class="w-full border rounded p-2"
-                placeholder="住まい（任意）"
-            >
+                <input name="residence" class="w-full border rounded p-2" placeholder="住まい（任意）">
 
-            <button
-                type="submit"
-                class="w-full bg-black text-white py-2 rounded font-bold"
-            >
-                送信
-            </button>
-        </form>
+                <button type="submit" class="w-full bg-black text-white py-2 rounded font-bold">
+                    送信
+                </button>
+            </form>
+        </div>
     </div>
-</div>
 @endif
-@if (
-    Auth::check() &&
-    filled(Auth::user()->shimei) &&
-    !Auth::user()->is_approved
-)
-<div
-    x-data="{ open: true }"
-    x-show="open"
-    class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70"
->
-    <div class="bg-white w-full max-w-md rounded-lg p-6 text-center shadow-xl">
-        <h2 class="text-xl font-bold text-red-600 mb-3">
-            現在利用を停止しています。
-        </h2>
+@if (Auth::check() && filled(Auth::user()->shimei) && !Auth::user()->is_approved)
+    <div x-data="{ open: true }" x-show="open"
+        class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70">
+        <div class="bg-white w-full max-w-md rounded-lg p-6 text-center shadow-xl">
+            <h2 class="text-xl font-bold text-red-600 mb-3">
+                現在利用を停止しています。
+            </h2>
 
-        <p class="text-gray-700 mb-4">
-            現在利用を停止しています。
-        </p>
+            <p class="text-gray-700 mb-4">
+                現在利用を停止しています。
+            </p>
 
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button class="mt-4 px-6 py-2 bg-black text-white rounded">
-                OK
-            </button>
-        </form>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button class="mt-4 px-6 py-2 bg-black text-white rounded">
+                    OK
+                </button>
+            </form>
+        </div>
     </div>
-</div>
 @endif
 
 <x-app-layout>
@@ -153,27 +121,22 @@
 
             });
         </script>
-        @if (Auth::check())
-        {{ Auth::user()->id }}
-        {{ Auth::user()->is_line_friend }}
-            @if (!Auth::user()->is_line_friend)
-                @if (Auth::check() && !Auth::user()->is_line_friend)
-                    <div class="mt-4 p-4 border rounded bg-yellow-100 text-black">
-                        <p class="font-bold">お知らせを受け取るには</p>
-                        <p class="mt-2">
-                            公式LINEを友だち追加してください。
-                        </p>
-                        <a href="https://line.me/R/ti/p/@758nctis"
-                        target="_blank"
-                        rel="noopener"
-                        class="inline-block mt-3 px-4 py-2 bg-green-600 text-white rounded">
-                            LINE友だち追加
-                        </a>
-                    </div>
-                @endif
+@if (session('line_blocked'))
+    <div class="mt-4 p-4 border rounded bg-yellow-100 text-black">
+        <p class="font-bold">お知らせを受け取るには</p>
+        <p class="mt-2">
+            公式LINEをブロックしています。<br>
+            ブロックを解除してから、再度ログインしてください。
+        </p>
+        <a href="https://line.me/R/ti/p/@758nctis"
+           target="_blank"
+           rel="noopener"
+           class="inline-block mt-3 px-4 py-2 bg-green-600 text-white rounded">
+            LINE友だち追加をしていない場合はここからお願いします。
+        </a>
+    </div>
+@endif
 
-            @endif
-        @endif
         @if ($topImages->count())
             <div x-data="carousel" x-init="start()" class="relative w-full overflow-hidden"
                 style="aspect-ratio: 16 / 9;">
@@ -468,7 +431,7 @@
 
         </div>
 
-                    <!-- タイトル -->
+        <!-- タイトル -->
         <h2 class="text-xl font-bold text-yellow-500 tracking-wide mb-3">
             OFFICIAL SNS
         </h2>

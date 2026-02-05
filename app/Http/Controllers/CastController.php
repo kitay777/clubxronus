@@ -12,35 +12,68 @@ use App\Models\TopImage; // TopImageモデルをインポート
 use App\Models\Ticker; // Tickerモデルをインポート
 use App\Models\News; // Newsモデルをインポート
 use App\Services\LineFriendService; // LineFriendServiceをインポート
+use Illuminate\Support\Facades\Session;
+use App\Models\Blog; // Blogモデルをインポート
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
+
 
 class CastController extends Controller
 {
     //
 
-    public function dashboard(LineFriendService $lineFriend)
-    {
-        $user = Auth::user();
+public function dashboard(LineFriendService $lineFriend)
+{
+    // 🔴 すでにブロック中なら何もしない（最重要）
+    if (Session::has('line_blocked')) {
+        return $this->renderDashboard();
+    }
 
-        if ($user && $user->line_user_id) {
-            // 🔴 毎回 LINE に事実確認
-            $isFriend = $lineFriend->isFriend($user);
+    $user = Auth::user();
 
-            // キャッシュとしてDB更新（任意だがおすすめ）
-            $user->update([
-                'is_line_friend' => $isFriend,
-            ]);
+    if ($user && $user->line_user_id) {
+        $status = $lineFriend->check($user);
+        if ($status === 'blocked') {
+            Auth::logout();
+
+            Session::put('line_blocked', true);
+
+            // 🔴 redirect するが、次回は上で弾かれる
+            return redirect()->route('dashboard');
         }
-        $casts = \App\Models\Cast::orderBy('id')->get();
-        $shopInfo = ShopInfo::first(); // 最初のレコードを取得（1つだけの場合）
+
+        if ($status === 'friend') {
+            $user->update(['is_line_friend' => true]);
+            Session::forget('line_blocked');
+        }
+    }
+
+    return $this->renderDashboard();
+}
+
+    /**
+     * dashboard 描画専用（切り出し）
+     */
+    private function renderDashboard()
+    {
+        $casts = Cast::orderBy('id')->get();
+        $shopInfo = ShopInfo::first();
         $topImages = TopImage::orderBy('order')->get();
         $tickers = Ticker::where('is_active', true)->orderBy('order')->pluck('text');
         $latestNews = News::where('is_active', true)
             ->orderByDesc('published_at')
             ->take(5)
             ->get();
-        $latestBlogs = \App\Models\Blog::orderByDesc('published_at')->take(6)->get();
+        $latestBlogs = Blog::orderByDesc('published_at')->take(6)->get();
 
-        return view('casts.dashboard', compact('casts', 'user', 'shopInfo', 'topImages', 'tickers', 'latestNews', 'latestBlogs'));
+        return view('casts.dashboard', compact(
+            'casts',
+            'shopInfo',
+            'topImages',
+            'tickers',
+            'latestNews',
+            'latestBlogs'
+        ));
     }
     public function list()
     {
