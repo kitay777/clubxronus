@@ -14,13 +14,11 @@ class CastRegisterController extends Controller
     {
         $user = Auth::user();
         // すでに申請済み・キャストの場合は弾く
-        dd( $user );
         if ($user->is_cast) {
             return redirect('/')->with('message', 'すでにキャスト申請済みです');
         }
 
     session(['cast_register' => true]);
-    dd(session('cast_register'));
         return view('cast.register');
     }
 
