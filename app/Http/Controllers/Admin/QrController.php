@@ -13,6 +13,7 @@ class QrController extends Controller
     }
     public function castRegister()
     {
+        dd('test');
         return view('admin.qr.castregister', [
             'url' => 'https://clubxronus.com/cast/register',
         ]);
