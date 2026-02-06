@@ -10,6 +10,7 @@
         <div class="mb-4 text-center">
             {!! QrCode::size(240)->generate($url) !!}
         </div>
+        
         <div class="text-center">
             <p class="text-black mb-1">
                 LINEの仕様でQRでキャスト登録できない場合は、以下のURLにアクセスしてください
