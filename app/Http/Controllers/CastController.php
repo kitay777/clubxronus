@@ -49,16 +49,7 @@ public function dashboard(LineFriendService $lineFriend)
         }
     }
 
-    if($user->is_cast == 0){
-            $hasPlayed = \DB::table('box_game_results')
-        ->where('user_id', $user->id)
-        ->exists();
-
-        if (! $hasPlayed) {
-            return redirect()->route('game.box');
-        }
-    
-    }
+ 
     return $this->renderDashboard();
 }
 
