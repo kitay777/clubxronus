@@ -13,6 +13,7 @@ class QrController extends Controller
     }
     public function castRegister()
     {
+        session(['cast_register' => true]);
         return view('admin.qr.castregister', [
             'url' => 'https://clubxronus.com/cast/register',
         ]);
