@@ -50,6 +50,7 @@ use App\Http\Controllers\LineWebhookController;
 use App\Http\Controllers\ProfileInitialController;
 use App\Http\Controllers\CastRegisterController;
 
+use App\Http\Middleware\RedirectIfAuthenticated;
 
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -312,13 +313,15 @@ Route::get('/recruit', [RecruitmentController::class, 'index'])->name('recruit.i
 |
 */
 // routes/web.php
-Route::middleware(['auth'])->group(function () {
-    Route::get('/cast/register', [CastRegisterController::class, 'create'])
-        ->name('cast.register');
+Route::middleware(['auth'])
+    ->withoutMiddleware([RedirectIfAuthenticated::class])
+    ->group(function () {
+        Route::get('/cast/register', [CastRegisterController::class, 'create'])
+            ->name('cast.register');
 
-    Route::post('/cast/register', [CastRegisterController::class, 'store'])
-        ->name('cast.register.store');
-});
+        Route::post('/cast/register', [CastRegisterController::class, 'store'])
+            ->name('cast.register.store');
+    });
 
 Route::get('/price', [SystemPriceController::class, 'index'])->name('system_prices.index');
 
