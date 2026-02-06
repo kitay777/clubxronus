@@ -21,7 +21,7 @@ public function handle(Request $request, Closure $next, ...$guards)
         if (Auth::guard($guard)->check()) {
 
             // ★ キャスト登録はログイン後でも通す
-            if ($request->is('cast/register')) {
+            if ($request->is('cast/register*')) {
                 return $next($request);
             }
 
