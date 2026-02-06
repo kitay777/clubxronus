@@ -82,6 +82,7 @@ public function callback(Request $request)
     $user->save();
 
     Auth::login($user);
+    dd( session()->pull('cast_register'));
     if (session()->pull('cast_register')) {
         return redirect()->route('cast.register');
     }
