@@ -11,4 +11,10 @@ class QrController extends Controller
             'url' => 'https://clubxronus.com/register',
         ]);
     }
+    public function castRegister()
+    {
+        return view('admin.qr.castregister', [
+            'url' => 'https://clubxronus.com/cast/register',
+        ]);
+    }
 }

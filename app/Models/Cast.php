@@ -10,15 +10,16 @@ class Cast extends Model
     use HasFactory;
     
 protected $fillable = [
+    'user_id',
     'name',
-    'role',
     'profile',
-    'image_path',
     'birthday',
     'height',
     'style',
     'area',
     'blood_type',
+    'role',
+    'image_path',
 ];
 public function user()
 {

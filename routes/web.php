@@ -48,6 +48,7 @@ use App\Http\Controllers\Admin\AdminUserMessageController;
 use App\Http\Controllers\LineWebhookController;
 
 use App\Http\Controllers\ProfileInitialController;
+use App\Http\Controllers\CastRegisterController;
 
 
 
@@ -136,6 +137,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/qr/register', [QrController::class, 'register'])
         ->name('admin.qr.register');
 });
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/qr/cast_register', [QrController::class, 'castRegister'])
+        ->name('admin.qr.cast_register');
+});
+
 
 Route::middleware(['auth', 'admin'])
     ->prefix('admin/users/{user}')
@@ -305,6 +311,15 @@ Route::get('/recruit', [RecruitmentController::class, 'index'])->name('recruit.i
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+// routes/web.php
+Route::middleware(['auth'])->group(function () {
+    Route::get('/cast/register', [CastRegisterController::class, 'create'])
+        ->name('cast.register');
+
+    Route::post('/cast/register', [CastRegisterController::class, 'store'])
+        ->name('cast.register.store');
+});
+
 Route::get('/price', [SystemPriceController::class, 'index'])->name('system_prices.index');
 
 Route::get('/casts/{cast}/news', [NewsController::class, 'castNews'])->name('casts.news');

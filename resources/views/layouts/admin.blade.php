@@ -49,6 +49,12 @@
                         📱 ユーザー登録QR
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('admin.qr.cast_register') }}"
+                    class="block px-4 py-2 hover:bg-gray-100">
+                        📱 キャスト登録QR
+                    </a>
+                </li>
                 <a href="{{ route('admin.shop_info.index') }}"
                     class="block px-4 py-2 rounded
                     {{ request()->routeIs('admin.shop_info.*')

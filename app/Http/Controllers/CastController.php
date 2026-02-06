@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Blog; // Blogモデルをインポート
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 
 
 class CastController extends Controller
@@ -48,6 +49,16 @@ public function dashboard(LineFriendService $lineFriend)
         }
     }
 
+    if($user->is_cast == 0){
+            $hasPlayed = \DB::table('box_game_results')
+        ->where('user_id', $user->id)
+        ->exists();
+
+        if (! $hasPlayed) {
+            return redirect()->route('game.box');
+        }
+    
+    }
     return $this->renderDashboard();
 }
 

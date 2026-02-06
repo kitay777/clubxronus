@@ -12,18 +12,25 @@ class Authenticate extends Middleware
      */
 protected function redirectTo(Request $request): ?string
 {
+    // JSONリクエストは対象外
     if ($request->expectsJson()) {
         return null;
     }
 
-    // 管理画面はメールログイン
+    // 管理画面は管理者ログインへ
     if ($request->is('admin') || $request->is('admin/*')) {
         return route('admin.login');
     }
 
-    // それ以外は LINE ログイン
+    // ★ キャスト登録は LINEログインへ
+    if ($request->is('cast/register')) {
+        return route('auth.line.redirect');
+    }
+
+    // その他の未ログインも LINEログインへ
     return route('auth.line.redirect');
 }
+
 
 
 }

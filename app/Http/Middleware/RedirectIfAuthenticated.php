@@ -20,6 +20,11 @@ public function handle(Request $request, Closure $next, ...$guards)
     foreach ($guards as $guard) {
         if (Auth::guard($guard)->check()) {
 
+            // ★ キャスト登録はログイン後でも通す
+            if ($request->is('cast/register')) {
+                return $next($request);
+            }
+
             // 管理画面
             if ($request->is('admin') || $request->is('admin/*')) {
                 return redirect()->route('admin.dashboard');
