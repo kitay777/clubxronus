@@ -9,7 +9,7 @@
             @foreach($setPrices as $item)
                 <tr>
                     <td class="font-semibold">{{ $item->title }}</td>
-                    <td>{{ $item->value }}</td>
+                    <td class="align-top">{!! nl2br(e($item->value)) !!}</td>
                 </tr>
             @endforeach
         </table>
@@ -19,7 +19,7 @@
             @foreach($nominatePrices as $item)
                 <tr>
                     <td class="font-semibold">{{ $item->title }}</td>
-                    <td>{{ $item->value }}</td>
+                    <td class="align-top">{!! nl2br(e($item->value)) !!}</td>
                 </tr>
             @endforeach
         </table>
@@ -29,7 +29,7 @@
             @foreach($cardPrices as $item)
                 <tr>
                     <td class="font-semibold">{{ $item->title }}</td>
-                    <td>{{ $item->value }}</td>
+                    <td class="align-top">{!! nl2br(e($item->value)) !!}</td>
                 </tr>
             @endforeach
         </table>
@@ -39,7 +39,7 @@
             @foreach($infos as $item)
                 <tr>
                     <td class="font-semibold">{{ $item->title }}</td>
-                    <td>{{ $item->value }}</td>
+                    <td class="align-top">{!! nl2br(e($item->value)) !!}</td>
                 </tr>
             @endforeach
         </table>

@@ -45,7 +45,7 @@
         <div class="mb-4">
             <label for="email" class="block text-sm font-medium text-gray-700">メールアドレス</label>
             <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}"
-                class="mt-1 block w-full p-2 border border-gray-300 rounded-md" required>
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
         </div>
 
         <div class="mb-4">
