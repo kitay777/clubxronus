@@ -278,6 +278,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/', fn () => view('admin.dashboard'))->name('admin.dashboard');
     Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users.index');
+    Route::get('/casts', [AdminUserController::class, 'castindex'])->name('admin.casts.index');
     Route::get('/users/{user}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');
     Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
 

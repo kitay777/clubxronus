@@ -43,6 +43,13 @@
                         : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
                     ユーザー管理
                 </a>
+                <a href="{{ route('admin.casts.index') }}"
+                    class="block px-4 py-2 rounded
+                    {{ request()->routeIs('admin.casts.*')
+                        ? 'bg-gray-800 text-white'
+                        : 'text-gray-400 hover:bg-gray-800 hover:text-white' }}">
+                    キャスト管理
+                </a>
                 <li>
                     <a href="{{ route('admin.qr.register') }}"
                     class="block px-4 py-2 hover:bg-gray-100">

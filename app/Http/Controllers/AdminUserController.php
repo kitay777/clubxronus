@@ -33,7 +33,7 @@ class AdminUserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::query()->with(['profile', 'visits']);
+        $query = User::query()->with(['profile', 'visits'])->where('is_cast', 0);
 
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
@@ -76,6 +76,53 @@ class AdminUserController extends Controller
         $users = $query->orderByDesc('id')->paginate(20);
 
         return view('admin.users.index', compact('users'));
+    }
+
+    public function castindex(Request $request)
+    {
+        $query = User::query()->with(['profile', 'visits'])->where('is_cast', 1);
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('age_from') || $request->filled('age_to')) {
+            $query->whereHas('profile', function ($q) use ($request) {
+                if ($request->filled('age_from')) {
+                    $q->where('age', '>=', $request->age_from);
+                }
+                if ($request->filled('age_to')) {
+                    $q->where('age', '<=', $request->age_to);
+                }
+            });
+        }
+
+        if ($request->filled('residence')) {
+            $query->whereHas('profile', function ($q) use ($request) {
+                $q->where('residence', 'like', '%' . $request->residence . '%');
+            });
+        }
+
+        if ($request->filled('visit_from') || $request->filled('visit_to')) {
+            $query->whereHas('visits', function ($q) use ($request) {
+                if ($request->filled('visit_from')) {
+                    $q->whereDate('visit_date', '>=', $request->visit_from);
+                }
+                if ($request->filled('visit_to')) {
+                    $q->whereDate('visit_date', '<=', $request->visit_to);
+                }
+            });
+        }
+
+        if ($request->filled('cast_name')) {
+            $query->whereHas('visits', function ($q) use ($request) {
+                $q->where('cast_name', 'like', '%' . $request->cast_name . '%');
+            });
+        }
+
+        $users = $query->orderByDesc('id')->paginate(20);
+
+        return view('admin.casts.index', compact('users'));
     }
 
     /**
