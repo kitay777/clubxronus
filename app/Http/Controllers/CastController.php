@@ -23,44 +23,46 @@ class CastController extends Controller
 {
     //
 
-public function dashboard(LineFriendService $lineFriend)
-{
-    // 🔴 すでにブロック中なら何もしない（最重要）
-    if (Session::has('line_blocked')) {
+    public function dashboard(LineFriendService $lineFriend)
+    {
+        // 🔴 すでにブロック中なら何もしない（最重要）
+        if (Session::has('line_blocked')) {
+            return $this->renderDashboard();
+        }
+
+        $user = Auth::user();
+
+        if ($user && $user->line_user_id) {
+            $status = $lineFriend->check($user);
+            if ($status === 'blocked') {
+                Auth::logout();
+
+                Session::put('line_blocked', true);
+
+                // 🔴 redirect するが、次回は上で弾かれる
+                return redirect()->route('dashboard');
+            }
+
+            if ($status === 'friend') {
+                $user->update(['is_line_friend' => true]);
+                Session::forget('line_blocked');
+            }
+        }
+        if ($user) {
+            if ($user->is_cast == 0) {
+                if ($user->shimei != null) {
+                    $hasPlayed = \DB::table('box_game_results')
+                        ->where('user_id', $user->id)
+                        ->exists();
+
+                    if (! $hasPlayed) {
+                        return redirect()->route('game.box');
+                    }
+                }
+            }
+        }
         return $this->renderDashboard();
     }
-
-    $user = Auth::user();
-
-    if ($user && $user->line_user_id) {
-        $status = $lineFriend->check($user);
-        if ($status === 'blocked') {
-            Auth::logout();
-
-            Session::put('line_blocked', true);
-
-            // 🔴 redirect するが、次回は上で弾かれる
-            return redirect()->route('dashboard');
-        }
-
-        if ($status === 'friend') {
-            $user->update(['is_line_friend' => true]);
-            Session::forget('line_blocked');
-        }
-    }
-    if($user){
-    if($user->is_cast == 0){
-            $hasPlayed = \DB::table('box_game_results')
-        ->where('user_id', $user->id)
-        ->exists();
-
-        if (! $hasPlayed) {
-            return redirect()->route('game.box');
-        }
-        }
-    }
-    return $this->renderDashboard();
-}
 
     /**
      * dashboard 描画専用（切り出し）
