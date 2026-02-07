@@ -50,6 +50,7 @@ public function dashboard(LineFriendService $lineFriend)
     }
     if($user){
     if($user->is_cast == 0){
+        if( $user->shimei!= null){
             $hasPlayed = \DB::table('box_game_results')
         ->where('user_id', $user->id)
         ->exists();
@@ -59,6 +60,7 @@ public function dashboard(LineFriendService $lineFriend)
         }
         }
     
+    }
     }
     return $this->renderDashboard();
 }
